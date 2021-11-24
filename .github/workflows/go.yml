@@ -1,16 +1,16 @@
-name: Go checks
+name: Go
 
 on: [push]
 
 jobs:
   lint:
-    name: go lint
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: golangci/golangci-lint-action@v2
   test:
-    name: go test
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -20,7 +20,7 @@ jobs:
       - run: go version
       - run: go test -v ./...
   vet:
-    name: go vet
+    name: Vet
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
