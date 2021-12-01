@@ -37,12 +37,27 @@ func timeRun(part string, fn interface{}, a interface{}) {
 	log(part, result, "("+elapsed.String()+")")
 }
 
-func Part1(fn interface{}, a interface{}) {
-	timeRun("Part 1", fn, a)
+type AoC struct {
+	day int
 }
 
-func Part2(fn interface{}, a interface{}) {
+func Day(day int) *AoC {
+	color.Set(color.FgMagenta)
+
+	fmt.Println("❄️  🎄 AoC 2021 - Day", day, "🎄 ❄️")
+
+	color.Unset()
+	return &AoC{day}
+}
+
+func (aoc *AoC) Part1(fn interface{}, a interface{}) *AoC {
+	timeRun("Part 1", fn, a)
+	return aoc
+}
+
+func (aoc *AoC) Part2(fn interface{}, a interface{}) *AoC {
 	timeRun("Part 2", fn, a)
+	return aoc
 }
 
 func log(prefix string, result interface{}, timing string) {
