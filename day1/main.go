@@ -13,8 +13,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	utils.Part1(Day1Part1(input))
-	utils.Part2(Day1Part2(input))
+	utils.Part1(Day1Part1, input)
+	utils.Part2(Day1Part2, input)
 }
 
 func Day1Part1(input []int) int {
@@ -25,7 +25,7 @@ func Day1Part2(input []int) int {
 	l := len(input) - 2
 	reducedList := make([]int, l)
 	for i := 0; i < l; i++ {
-		reducedList[i] = utils.SumInts(input[i : i+2])
+		reducedList[i] = utils.SumInts(input[i : i+3])
 	}
 	return calculateIncreases(reducedList)
 }
