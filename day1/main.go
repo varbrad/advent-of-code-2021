@@ -22,9 +22,10 @@ func Day1Part1(input []int) int {
 }
 
 func Day1Part2(input []int) int {
-	reducedList := []int{}
-	for i := 0; i < len(input)-2; i++ {
-		reducedList = append(reducedList, input[i]+input[i+1]+input[i+2])
+	l := len(input) - 2
+	reducedList := make([]int, l)
+	for i := 0; i < l; i++ {
+		reducedList[i] = utils.SumInts(input[i : i+2])
 	}
 	return calculateIncreases(reducedList)
 }
