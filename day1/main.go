@@ -10,23 +10,18 @@ func main() {
 }
 
 func Day1Part1(input []int) int {
-	return calculateIncreases(input)
+	return calculateIncreases(input, 1)
 }
 
 func Day1Part2(input []int) int {
-	l := len(input) - 2
-	reducedList := make([]int, l)
-	for i := 0; i < l; i++ {
-		reducedList[i] = utils.SumInts(input[i : i+3])
-	}
-	return calculateIncreases(reducedList)
+	return calculateIncreases(input, 3)
 }
 
-func calculateIncreases(numbers []int) int {
+func calculateIncreases(numbers []int, gap int) int {
 	inc := 0
 
-	for i := 0; i < len(numbers)-1; i++ {
-		if numbers[i] < numbers[i+1] {
+	for i := 0; i < len(numbers)-gap; i++ {
+		if numbers[i] < numbers[i+gap] {
 			inc += 1
 		}
 	}
