@@ -2,17 +2,15 @@ package utils
 
 import (
 	"io/ioutil"
-	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
 func ReadInput(path string) []byte {
-	cwd, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
-	fullPath := filepath.Join(cwd, path)
+	_, b, _, _ := runtime.Caller(0)
+	basepath := filepath.Join(filepath.Dir(b), "..")
+	fullPath := filepath.Join(basepath, path)
 	bytes, err := ioutil.ReadFile(fullPath)
 	if err != nil {
 		panic(err)
