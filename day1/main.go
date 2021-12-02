@@ -13,7 +13,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	utils.Day(1).Part1(Day1Part1, input).Part2(Day1Part2, input)
+	utils.Day(1).Input(input).Part1(Day1Part1).Part2(Day1Part2)
 }
 
 func Day1Part1(input []int) int {

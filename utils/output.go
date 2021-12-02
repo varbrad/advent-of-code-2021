@@ -38,7 +38,8 @@ func timeRun(part string, fn interface{}, a interface{}) {
 }
 
 type AoC struct {
-	day int
+	day   int
+	input interface{}
 }
 
 func Day(day int) *AoC {
@@ -47,16 +48,21 @@ func Day(day int) *AoC {
 	fmt.Println("❄️  🎄 AoC 2021 - Day", day, "🎄 ❄️")
 
 	color.Unset()
-	return &AoC{day}
+	return &AoC{day, nil}
 }
 
-func (aoc *AoC) Part1(fn interface{}, a interface{}) *AoC {
-	timeRun("Part 1", fn, a)
+func (aoc *AoC) Input(input interface{}) *AoC {
+	aoc.input = input
 	return aoc
 }
 
-func (aoc *AoC) Part2(fn interface{}, a interface{}) *AoC {
-	timeRun("Part 2", fn, a)
+func (aoc *AoC) Part1(fn interface{}) *AoC {
+	timeRun("Part 1", fn, aoc.input)
+	return aoc
+}
+
+func (aoc *AoC) Part2(fn interface{}) *AoC {
+	timeRun("Part 2", fn, aoc.input)
 	return aoc
 }
 
