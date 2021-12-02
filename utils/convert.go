@@ -4,26 +4,19 @@ import (
 	"strconv"
 )
 
-func ToInteger(text string) (int, error) {
-	return strconv.Atoi(text)
-}
-
-func ToInt(text string) int {
-	value, err := ToInteger(text)
+func ToInteger(text string) int {
+	value, err := strconv.Atoi(text)
 	if err != nil {
-		panic(text + " could not be converted to an 'int'")
+		panic(err)
 	}
 	return value
 }
 
-func ToIntegers(stringList []string) ([]int, error) {
+func ToIntegers(stringList []string) []int {
 	ints := make([]int, len(stringList))
 	for i, s := range stringList {
-		value, err := ToInteger(s)
-		if err != nil {
-			return nil, err
-		}
+		value := ToInteger(s)
 		ints[i] = value
 	}
-	return ints, nil
+	return ints
 }
