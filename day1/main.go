@@ -1,18 +1,11 @@
 package main
 
 import (
-	"log"
-
 	"github.com/varbrad/advent-of-code-2021/utils"
 )
 
 func main() {
-	input, err := utils.ReadInputToIntegerList("day1/input")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	input := utils.ReadInputToIntegerList("day1/input")
 	utils.Day(1).Part1(Day1Part1, input).Part2(Day1Part2, input)
 }
 

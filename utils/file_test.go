@@ -8,48 +8,37 @@ import (
 
 func TestReadInputCanParseAFile(t *testing.T) {
 	expected := "1\n2\n3\n"
-	actual, err := ReadInput("__tests__/list")
+	actual := ReadInput("__tests__/list")
 
 	assert.Equal(t, expected, string(actual))
-	assert.Nil(t, err)
 }
 
 func TestReadInputHandlesNonExistantFile(t *testing.T) {
-	_, err := ReadInput("__tests__/non-existant-file")
-
-	assert.Error(t, err)
+	assert.Panics(t, func() { ReadInput("__tests__/non-existant-file") })
 }
 
 func TestReadInputToListCanParseAList(t *testing.T) {
 	expected := []string{"1", "2", "3"}
-	actual, err := ReadInputToList("__tests__/list")
+	actual := ReadInputToList("__tests__/list")
 
 	assert.Equal(t, expected, actual)
-	assert.Nil(t, err)
 }
 
 func TestReadInputToListHandlesNonExistantFile(t *testing.T) {
-	_, err := ReadInputToList("__tests__/non-existant-file")
-
-	assert.Error(t, err)
+	assert.Panics(t, func() { ReadInputToList("__tests__/non-existant-file") })
 }
 
 func TestReadInputToIntegerListCanParseAList(t *testing.T) {
 	expected := []int{1, 2, 3}
-	actual, err := ReadInputToIntegerList("__tests__/list")
+	actual := ReadInputToIntegerList("__tests__/list")
 
 	assert.Equal(t, expected, actual)
-	assert.Nil(t, err)
 }
 
 func TestReadInputToIntegerListHandlesNonExistantFile(t *testing.T) {
-	_, err := ReadInputToIntegerList("__tests__/non-existant-file")
-
-	assert.Error(t, err)
+	assert.Panics(t, func() { ReadInputToIntegerList("__tests__/non-existant-file") })
 }
 
 func TestReadInputToIntegerListHandlesInvalidList(t *testing.T) {
-	_, err := ReadInputToIntegerList("__tests__/string-list")
-
-	assert.Error(t, err)
+	assert.Panics(t, func() { ReadInputToIntegerList("__tests__/string-list") })
 }

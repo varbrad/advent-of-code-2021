@@ -7,27 +7,25 @@ import (
 	"strings"
 )
 
-func ReadInput(path string) ([]byte, error) {
+func ReadInput(path string) []byte {
 	cwd, err := os.Getwd()
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 	fullPath := filepath.Join(cwd, path)
-	return ioutil.ReadFile(fullPath)
+	bytes, err := ioutil.ReadFile(fullPath)
+	if err != nil {
+		panic(err)
+	}
+	return bytes
 }
 
-func ReadInputToList(path string) ([]string, error) {
-	contents, err := ReadInput(path)
-	if err != nil {
-		return nil, err
-	}
-	return strings.Split(strings.TrimSpace(string(contents)), "\n"), nil
+func ReadInputToList(path string) []string {
+	contents := ReadInput(path)
+	return strings.Split(strings.TrimSpace(string(contents)), "\n")
 }
 
-func ReadInputToIntegerList(path string) ([]int, error) {
-	rows, err := ReadInputToList(path)
-	if err != nil {
-		return nil, err
-	}
+func ReadInputToIntegerList(path string) []int {
+	rows := ReadInputToList(path)
 	return ToIntegers(rows)
 }
