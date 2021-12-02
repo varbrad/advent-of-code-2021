@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"strconv"
 	"strings"
 
 	"github.com/varbrad/advent-of-code-2021/utils"
@@ -19,47 +18,34 @@ func main() {
 }
 
 func Day2Part1(input []string) int {
-	x, y, instructions := 0, 0, processInput(input)
-	for _, ins := range instructions {
-		switch ins.operation {
-		case "forward":
-			x += ins.value
-		case "down":
-			y += ins.value
-		case "up":
-			y -= ins.value
-		}
-	}
-	return x * y
+	return calculate(input, false)
 }
 
 func Day2Part2(input []string) int {
-	aim, depth, horizontal, instructions := 0, 0, 0, processInput(input)
-	for _, ins := range instructions {
-		switch ins.operation {
+	return calculate(input, true)
+}
+
+func calculate(input []string, useAim bool) int {
+	aim, depth, horizontal := 0, 0, 0
+	for _, line := range input {
+		parts := strings.Split(line, " ")
+		operation, value := parts[0], utils.ToInt(parts[1])
+		switch operation {
 		case "forward":
-			horizontal += ins.value
-			depth += aim * ins.value
-		case "down":
-			aim += ins.value
-		case "up":
-			aim -= ins.value
+			horizontal += value
+			if useAim {
+				depth += aim * value
+			}
+		case "down", "up":
+			if operation == "up" {
+				value *= -1
+			}
+			if useAim {
+				aim += value
+			} else {
+				depth += value
+			}
 		}
 	}
 	return depth * horizontal
-}
-
-type Instruction struct {
-	operation string
-	value     int
-}
-
-func processInput(input []string) []Instruction {
-	instructions := make([]Instruction, len(input))
-	for _, v := range input {
-		a := strings.Split(v, " ")
-		val, _ := strconv.Atoi(a[1])
-		instructions = append(instructions, Instruction{a[0], val})
-	}
-	return instructions
 }
