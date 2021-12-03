@@ -17,46 +17,26 @@ type Sums struct {
 }
 
 func Day3Part1(input []string) int {
-	common := make([]Sums, len(input[0]))
-	for _, s := range input {
-		for ix, c := range s {
-			switch string(c) {
-			case "0":
-				common[ix].zero = common[ix].zero + 1
-			case "1":
-				common[ix].one = common[ix].one + 1
-			}
-		}
-	}
-
-	a := ""
-	b := ""
-	for _, s := range common {
-		if s.zero > s.one {
-			a = a + "0"
-			b = b + "1"
-		} else {
-			a = a + "1"
-			b = b + "0"
-		}
-	}
-
-	gamma, _ := strconv.ParseInt(a, 2, 64)
-	epsilon, _ := strconv.ParseInt(b, 2, 64)
-	return int(gamma * epsilon)
+	commons := getCommons(input)
+	gamma := getString("common", commons)
+	epsilon := getString("uncommon", commons)
+	return calculate(gamma, epsilon)
 }
 
 func Day3Part2(input []string) int {
-	oxygen := getMatching("common", input, 0)
-	co2 := getMatching("uncommon", input, 0)
+	oxygen := recursiveSearcher("common", input, 0)
+	co2 := recursiveSearcher("uncommon", input, 0)
+	return calculate(oxygen, co2)
+}
 
-	gamma, _ := strconv.ParseInt(oxygen, 2, 64)
-	epsilon, _ := strconv.ParseInt(co2, 2, 64)
+func calculate(a string, b string) int {
+	gamma, _ := strconv.ParseInt(a, 2, 64)
+	epsilon, _ := strconv.ParseInt(b, 2, 64)
 
 	return int(gamma * epsilon)
 }
 
-func getMatching(mode string, input []string, index int) string {
+func getCommons(input []string) []Sums {
 	commons := make([]Sums, len(input[0]))
 	for _, s := range input {
 		for ix, rune := range s {
@@ -68,7 +48,11 @@ func getMatching(mode string, input []string, index int) string {
 			}
 		}
 	}
+	return commons
+}
 
+func recursiveSearcher(mode string, input []string, index int) string {
+	commons := getCommons(input)
 	v := getString(mode, commons)
 
 	left := []string{}
@@ -80,7 +64,7 @@ func getMatching(mode string, input []string, index int) string {
 	if len(left) == 1 {
 		return left[0]
 	}
-	return getMatching(mode, left, index+1)
+	return recursiveSearcher(mode, left, index+1)
 }
 
 func getString(mode string, commons []Sums) string {
