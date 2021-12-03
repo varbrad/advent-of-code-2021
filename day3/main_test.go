@@ -29,3 +29,27 @@ func TestDay2Part1(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	})
 }
+
+func TestDay2Part2(t *testing.T) {
+	t.Run("Should solve the example", func(t *testing.T) {
+		input := []string{
+			"00100",
+			"11110",
+			"10110",
+			"10111",
+			"10101",
+			"01111",
+			"00111",
+			"11100",
+			"10000",
+			"11001",
+			"00010",
+			"01010",
+		}
+
+		expected := 230
+		actual := Day3Part2(input)
+
+		assert.Equal(t, expected, actual)
+	})
+}
