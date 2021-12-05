@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/varbrad/advent-of-code-2021/utils"
 )
 
 func TestDay5Part1(t *testing.T) {
@@ -26,6 +27,15 @@ func TestDay5Part1(t *testing.T) {
 
 		assert.Equal(t, expected, actual)
 	})
+
+	t.Run("Should solve my puzzle input", func(t *testing.T) {
+		input := utils.ReadInputToList("day5/input")
+
+		expected := 7297
+		actual := Day5Part1(input)
+
+		assert.Equal(t, expected, actual)
+	})
 }
 
 func TestDay5Part2(t *testing.T) {
@@ -44,6 +54,15 @@ func TestDay5Part2(t *testing.T) {
 		}
 
 		expected := 12
+		actual := Day5Part2(input)
+
+		assert.Equal(t, expected, actual)
+	})
+
+	t.Run("Should solve my puzzle input", func(t *testing.T) {
+		input := utils.ReadInputToList("day5/input")
+
+		expected := 21038
 		actual := Day5Part2(input)
 
 		assert.Equal(t, expected, actual)
