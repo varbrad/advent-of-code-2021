@@ -22,7 +22,7 @@ func calculate(input []int, loops int) int {
 	for i := 0; i < loops; i++ {
 		result = process(result)
 	}
-	return utils.SumInts(result[:])
+	return utils.SumInts(result)
 }
 
 func parseInput(input []int) []int {
@@ -34,8 +34,7 @@ func parseInput(input []int) []int {
 }
 
 func process(input []int) []int {
-	zeroes := input[0]
-	list := append(input[1:], zeroes)
-	list[6] += zeroes
+	list := append(input[1:], input[0])
+	list[6] += input[0]
 	return list
 }
