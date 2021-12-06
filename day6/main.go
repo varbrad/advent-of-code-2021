@@ -10,41 +10,32 @@ func main() {
 }
 
 func Day6Part1(input []int) int {
-	result := parseInput(input)
-
-	for i := 0; i < 80; i++ {
-		result = process(result)
-	}
-	return utils.SumInts(result[:])
+	return calculate(input, 80)
 }
 
 func Day6Part2(input []int) int {
-	result := parseInput(input)
+	return calculate(input, 256)
+}
 
-	for i := 0; i < 256; i++ {
+func calculate(input []int, loops int) int {
+	result := parseInput(input)
+	for i := 0; i < loops; i++ {
 		result = process(result)
 	}
 	return utils.SumInts(result[:])
 }
 
-func parseInput(input []int) [9]int {
-	list := [9]int{}
+func parseInput(input []int) []int {
+	list := make([]int, 9)
 	for _, v := range input {
 		list[v]++
 	}
 	return list
 }
 
-func process(input [9]int) [9]int {
-	list := [9]int{}
+func process(input []int) []int {
 	zeroes := input[0]
-
-	for i := 0; i < 8; i++ {
-		list[i] = input[i+1]
-	}
-
+	list := append(input[1:], zeroes)
 	list[6] += zeroes
-	list[8] = zeroes
-
 	return list
 }
