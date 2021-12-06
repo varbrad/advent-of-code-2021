@@ -7,7 +7,7 @@ import (
 	"github.com/varbrad/advent-of-code-2021/utils"
 )
 
-func TestDay2Part1(t *testing.T) {
+func TestDay3Part1(t *testing.T) {
 	t.Run("Should solve the example", func(t *testing.T) {
 		input := []string{
 			"00100",
@@ -40,7 +40,7 @@ func TestDay2Part1(t *testing.T) {
 	})
 }
 
-func TestDay2Part2(t *testing.T) {
+func TestDay3Part2(t *testing.T) {
 	t.Run("Should solve the example", func(t *testing.T) {
 		input := []string{
 			"00100",

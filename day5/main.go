@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"regexp"
 
 	"github.com/varbrad/advent-of-code-2021/utils"
@@ -14,28 +13,32 @@ func main() {
 }
 
 func Day5Part1(input []string) int {
+	return solver(input, false)
+}
+
+func Day5Part2(input []string) int {
+	return solver(input, true)
+}
+
+func solver(input []string, includeDiagonals bool) int {
 	lines := parseInput(input)
 
 	cells := map[string]int{}
 
 	for _, line := range lines {
-		if line.a.x != line.b.x && line.a.y != line.b.y {
+		if !includeDiagonals && line.a.x != line.b.x && line.a.y != line.b.y {
 			continue
 		}
-		if line.a.x == line.b.x {
-			minY := int(math.Min(float64(line.a.y), float64(line.b.y)))
-			maxY := int(math.Max(float64(line.a.y), float64(line.b.y)))
-
-			for y := minY; y <= maxY; y++ {
-				cells[fmt.Sprintf("%d,%d", line.a.x, y)]++
+		x, y := line.a.x, line.a.y
+		dx := getSign(line.a.x, line.b.x)
+		dy := getSign(line.a.y, line.b.y)
+		for {
+			cells[fmt.Sprintf("%d,%d", x, y)]++
+			if x == line.b.x && y == line.b.y {
+				break
 			}
-		} else {
-			minX := int(math.Min(float64(line.a.x), float64(line.b.x)))
-			maxX := int(math.Max(float64(line.a.x), float64(line.b.x)))
-
-			for x := minX; x <= maxX; x++ {
-				cells[fmt.Sprintf("%d,%d", x, line.a.y)]++
-			}
+			x += dx
+			y += dy
 		}
 	}
 
@@ -48,40 +51,15 @@ func Day5Part1(input []string) int {
 	return sum
 }
 
-func Day5Part2(input []string) int {
-	lines := parseInput(input)
-
-	cells := map[string]int{}
-
-	for _, line := range lines {
-		x, y := line.a.x, line.a.y
-		max := 999
-		for {
-			cells[fmt.Sprintf("%d,%d", x, y)]++
-			max--
-			if x == line.b.x && y == line.b.y {
-				break
-			}
-			if line.a.x < line.b.x {
-				x++
-			} else if line.a.x > line.b.x {
-				x--
-			}
-			if line.a.y < line.b.y {
-				y++
-			} else if line.a.y > line.b.y {
-				y--
-			}
-		}
+func getSign(a int, b int) int {
+	switch {
+	case a < b:
+		return 1
+	case b < a:
+		return -1
+	default:
+		return 0
 	}
-
-	sum := 0
-	for _, v := range cells {
-		if v > 1 {
-			sum++
-		}
-	}
-	return sum
 }
 
 var parseRegex = regexp.MustCompile(`(\d+),(\d+) -> (\d+),(\d+)`)
