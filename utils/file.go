@@ -27,3 +27,8 @@ func ReadInputToIntegerList(path string) []int {
 	rows := ReadInputToList(path)
 	return ToIntegers(rows)
 }
+
+func ReadCommaInputToIntegerList(path string) []int {
+	data := ReadInput(path)
+	return ToIntegers(strings.Split(strings.TrimSpace(string(data)), ","))
+}
