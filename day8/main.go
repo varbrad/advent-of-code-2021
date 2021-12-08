@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"regexp"
-	"sort"
 	"strings"
 
 	"github.com/varbrad/advent-of-code-2021/utils"
@@ -87,13 +86,13 @@ func (d *Display) Solve1478() {
 func (d *Display) Solve369() {
 	for i := len(d.signals) - 1; i >= 0; i-- {
 		signal := d.signals[i]
-		if len(signal) == 5 && containsLetters(signal, d.solvedDigits[1]) {
+		if len(signal) == 5 && utils.StringContainsLetters(signal, d.solvedDigits[1]) {
 			d.solvedDigits[3] = signal
 			d.RemoveSignal(i)
-		} else if len(signal) == 6 && !containsLetters(signal, d.solvedDigits[1]) {
+		} else if len(signal) == 6 && !utils.StringContainsLetters(signal, d.solvedDigits[1]) {
 			d.solvedDigits[6] = signal
 			d.RemoveSignal(i)
-		} else if len(signal) == 6 && containsLetters(signal, d.solvedDigits[4]) {
+		} else if len(signal) == 6 && utils.StringContainsLetters(signal, d.solvedDigits[4]) {
 			d.solvedDigits[9] = signal
 			d.RemoveSignal(i)
 		}
@@ -106,7 +105,7 @@ func (d *Display) Solve05() {
 		if len(signal) == 6 {
 			d.solvedDigits[0] = signal
 			d.RemoveSignal(i)
-		} else if len(signal) == 5 && letterDiff(signal, d.solvedDigits[6]) == 1 {
+		} else if len(signal) == 5 && utils.CountStringDiff(signal, d.solvedDigits[6]) == 1 {
 			d.solvedDigits[5] = signal
 			d.RemoveSignal(i)
 		} else {
@@ -120,15 +119,6 @@ func (d *Display) RemoveSignal(signalIndex int) {
 	d.signals = append(d.signals[:signalIndex], d.signals[signalIndex+1:]...)
 }
 
-func containsLetters(primary string, substring string) bool {
-	for _, letter := range substring {
-		if !strings.Contains(primary, string(letter)) {
-			return false
-		}
-	}
-	return true
-}
-
 func (d *Display) SignalToInt(signal string) int {
 	for key, v := range d.solvedDigits {
 		if v == signal {
@@ -138,27 +128,12 @@ func (d *Display) SignalToInt(signal string) int {
 	return -1
 }
 
-func letterDiff(a string, b string) int {
-	diff := 0
-	for _, char := range a {
-		if !containsLetters(b, string(char)) {
-			diff++
-		}
-	}
-	for _, char := range b {
-		if !containsLetters(a, string(char)) {
-			diff++
-		}
-	}
-	return diff
-}
-
 func (d *Display) Sort() {
 	for ix, digit := range d.digits {
-		d.digits[ix] = sortString(digit)
+		d.digits[ix] = utils.SortString(digit)
 	}
 	for ix, signal := range d.signals {
-		d.signals[ix] = sortString(signal)
+		d.signals[ix] = utils.SortString(signal)
 	}
 }
 
@@ -176,10 +151,4 @@ func parseInput(input []string) []Display {
 		displays = append(displays, display)
 	}
 	return displays
-}
-
-func sortString(w string) string {
-	s := strings.Split(w, "")
-	sort.Strings(s)
-	return strings.Join(s, "")
 }
