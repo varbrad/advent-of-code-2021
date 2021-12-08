@@ -71,4 +71,13 @@ func TestDay8Part2(t *testing.T) {
 
 		assert.Equal(t, expected, actual)
 	})
+
+	t.Run("Should solve my puzzle input", func(t *testing.T) {
+		input := utils.ReadInputToList("day8/input")
+
+		expected := 983030
+		actual := Day8Part2(input)
+
+		assert.Equal(t, expected, actual)
+	})
 }
