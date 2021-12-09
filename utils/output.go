@@ -19,6 +19,8 @@ func genericCall(f interface{}, arg interface{}) interface{} {
 		return f.(func(string) string)(arg.(string))
 	case func([]int) int:
 		return f.(func([]int) int)(arg.([]int))
+	case func([][]int) int:
+		return f.(func([][]int) int)(arg.([][]int))
 	case func(int) int:
 		return f.(func(int) int)(arg.(int))
 	case func([]int) string:

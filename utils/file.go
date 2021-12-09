@@ -32,3 +32,12 @@ func ReadCommaInputToIntegerList(path string) []int {
 	data := ReadInput(path)
 	return ToIntegers(strings.Split(strings.TrimSpace(string(data)), ","))
 }
+
+func ReadInputToIntGrid(path string) [][]int {
+	rows := ReadInputToList(path)
+	ints := make([][]int, len(rows))
+	for ix, row := range rows {
+		ints[ix] = ToIntegers(strings.Split(strings.TrimSpace(row), ""))
+	}
+	return ints
+}
