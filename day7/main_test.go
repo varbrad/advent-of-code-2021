@@ -7,7 +7,7 @@ import (
 	"github.com/varbrad/advent-of-code-2021/utils"
 )
 
-func TestDay6Part1(t *testing.T) {
+func TestDay7Part1(t *testing.T) {
 	t.Run("Should solve the example", func(t *testing.T) {
 		input := []int{16, 1, 2, 0, 4, 2, 7, 1, 2, 14}
 
@@ -27,7 +27,7 @@ func TestDay6Part1(t *testing.T) {
 	})
 }
 
-func TestDay6Part2(t *testing.T) {
+func TestDay7Part2(t *testing.T) {
 	t.Run("Should solve the example", func(t *testing.T) {
 		input := []int{16, 1, 2, 0, 4, 2, 7, 1, 2, 14}
 
