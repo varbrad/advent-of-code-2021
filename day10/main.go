@@ -77,21 +77,13 @@ func doRunesClose(open, close rune) bool {
 	panic("unknown open rune")
 }
 
+var scoreMap = map[rune]int{'(': 1, '[': 2, '{': 3, '<': 4, ')': 3, ']': 57, '}': 1197, '>': 25137}
+
 func (pl parsedLine) corruptionScore() int {
 	if pl.status != "corrupted" {
 		return 0
 	}
-	switch pl.lastRune {
-	case ')':
-		return 3
-	case ']':
-		return 57
-	case '}':
-		return 1197
-	case '>':
-		return 25137
-	}
-	panic("unknown final rune")
+	return scoreMap[pl.lastRune]
 }
 
 func (pl parsedLine) incompleteScore() int {
@@ -101,16 +93,7 @@ func (pl parsedLine) incompleteScore() int {
 	sum := 0
 	for i := len(pl.stack) - 1; i >= 0; i-- {
 		sum *= 5
-		switch pl.stack[i] {
-		case '(':
-			sum += 1
-		case '[':
-			sum += 2
-		case '{':
-			sum += 3
-		case '<':
-			sum += 4
-		}
+		sum += scoreMap[pl.stack[i]]
 	}
 	return sum
 }
