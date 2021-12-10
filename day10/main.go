@@ -14,7 +14,8 @@ func main() {
 func Day10Part1(input []string) int {
 	sum := 0
 	for _, line := range input {
-		sum += parseSymbols([]rune(line), []rune{})
+		pl := createLine(line)
+		sum += pl.corruptionScore()
 	}
 	return sum
 }
@@ -22,84 +23,94 @@ func Day10Part1(input []string) int {
 func Day10Part2(input []string) int {
 	scores := []int{}
 	for _, line := range input {
-		incomplete, stack := getIncompleteStack([]rune(line), []rune{})
-		if !incomplete {
+		pl := createLine(line)
+		if pl.status != "incomplete" {
 			continue
 		}
-		scores = append(scores, calculateScore(stack, 0))
+		scores = append(scores, pl.incompleteScore())
 	}
 	sort.Ints(scores)
 	return scores[len(scores)/2]
 }
 
-func calculateScore(stack []rune, sum int) int {
-	if len(stack) == 0 {
-		return sum
-	}
-	sum *= 5
-	switch stack[len(stack)-1] {
-	case '(':
-		sum += 1
-	case '[':
-		sum += 2
-	case '{':
-		sum += 3
-	case '<':
-		sum += 4
-	}
-	return calculateScore(stack[:len(stack)-1], sum)
+type parsedLine struct {
+	status   string
+	stack    []rune
+	lastRune rune
 }
 
-func parseSymbols(input []rune, stack []rune) int {
-	if len(input) == 0 {
-		return 0
+func createLine(input string) parsedLine {
+	return parseLine([]rune(input), []rune{})
+}
+
+func parseLine(runes []rune, stack []rune) parsedLine {
+	if len(runes) == 0 {
+		return parsedLine{"incomplete", stack, 0}
 	}
-	current := input[0]
+	current := runes[0]
 	switch current {
 	case '(', '{', '[', '<':
 		stack = append(stack, current)
-		return parseSymbols(input[1:], stack)
+		return parseLine(runes[1:], stack)
 	case ')', '}', ']', '>':
 		lastStack := stack[len(stack)-1]
-		if lastStack == '(' && current == ')' ||
-			lastStack == '{' && current == '}' ||
-			lastStack == '[' && current == ']' ||
-			lastStack == '<' && current == '>' {
-			return parseSymbols(input[1:], stack[:len(stack)-1])
+		if doRunesClose(lastStack, current) {
+			return parseLine(runes[1:], stack[:len(stack)-1])
 		} else {
-			switch current {
-			case ')':
-				return 3
-			case ']':
-				return 57
-			case '}':
-				return 1197
-			case '>':
-				return 25137
-			}
+			return parsedLine{"corrupted", stack, current}
 		}
 	}
-	return parseSymbols(input[1:], stack)
+	panic("unknown character encountered")
 }
 
-func getIncompleteStack(input []rune, stack []rune) (incomplete bool, finalStack []rune) {
-	if len(input) == 0 {
-		return true, stack
+func doRunesClose(open, close rune) bool {
+	switch open {
+	case '(':
+		return close == ')'
+	case '{':
+		return close == '}'
+	case '[':
+		return close == ']'
+	case '<':
+		return close == '>'
 	}
-	current := input[0]
-	switch current {
-	case '(', '{', '[', '<':
-		return getIncompleteStack(input[1:], append(stack, current))
-	case ')', '}', ']', '>':
-		lastStack := stack[len(stack)-1]
-		if lastStack == '(' && current == ')' ||
-			lastStack == '{' && current == '}' ||
-			lastStack == '[' && current == ']' ||
-			lastStack == '<' && current == '>' {
-			return getIncompleteStack(input[1:], stack[:len(stack)-1])
-		} else {
-			return false, nil
+	panic("unknown open rune")
+}
+
+func (pl parsedLine) corruptionScore() int {
+	if pl.status != "corrupted" {
+		return 0
+	}
+	switch pl.lastRune {
+	case ')':
+		return 3
+	case ']':
+		return 57
+	case '}':
+		return 1197
+	case '>':
+		return 25137
+	}
+	panic("unknown final rune")
+}
+
+func (pl parsedLine) incompleteScore() int {
+	if pl.status != "incomplete" {
+		return 0
+	}
+	sum := 0
+	for i := len(pl.stack) - 1; i >= 0; i-- {
+		sum *= 5
+		switch pl.stack[i] {
+		case '(':
+			sum += 1
+		case '[':
+			sum += 2
+		case '{':
+			sum += 3
+		case '<':
+			sum += 4
 		}
 	}
-	return false, nil
+	return sum
 }
