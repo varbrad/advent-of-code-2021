@@ -9,7 +9,7 @@ import (
 
 func main() {
 	input := utils.ReadCommaInputToIntegerList("day7/input")
-	utils.Day(7).Input(input).Part1(Day7Part1).Part2(Day7Part2)
+	utils.Day(7, "The Treachery Of Whales").Input(input).Part1(Day7Part1).Part2(Day7Part2)
 }
 
 func Day7Part1(input []int) int {

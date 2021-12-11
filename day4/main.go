@@ -6,7 +6,7 @@ import (
 
 func main() {
 	input := utils.ReadInputToList("day4/input")
-	utils.Day(4).Input(input).Part1(Day4Part1).Part2(Day4Part2)
+	utils.Day(4, "Giant Squid").Input(input).Part1(Day4Part1).Part2(Day4Part2)
 }
 
 func Day4Part1(input []string) int {

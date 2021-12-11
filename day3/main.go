@@ -8,7 +8,7 @@ import (
 
 func main() {
 	input := utils.ReadInputToList("day3/input")
-	utils.Day(3).Input(input).Part1(Day3Part1).Part2(Day3Part2)
+	utils.Day(3, "Binary Diagnostic").Input(input).Part1(Day3Part1).Part2(Day3Part2)
 }
 
 type Sums struct {

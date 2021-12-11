@@ -8,7 +8,7 @@ import (
 
 func main() {
 	input := utils.ReadInputToIntGrid("day11/input")
-	utils.Day(11).Input(input).Part1(Day11Part1).Part2(Day11Part2)
+	utils.Day(11, "Dumbo Octopus").Input(input).Part1(Day11Part1).Part2(Day11Part2)
 }
 
 func Day11Part1(input [][]int) int {

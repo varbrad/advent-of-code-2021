@@ -9,7 +9,7 @@ import (
 
 func main() {
 	input := utils.ReadInputToList("day5/input")
-	utils.Day(5).Input(input).Part1(Day5Part1).Part2(Day5Part2)
+	utils.Day(5, "Hydrothermal Venture").Input(input).Part1(Day5Part1).Part2(Day5Part2)
 }
 
 func Day5Part1(input []string) int {

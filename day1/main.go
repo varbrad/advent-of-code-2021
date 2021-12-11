@@ -6,7 +6,7 @@ import (
 
 func main() {
 	input := utils.ReadInputToIntegerList("day1/input")
-	utils.Day(1).Input(input).Part1(Day1Part1).Part2(Day1Part2)
+	utils.Day(1, "Sonar Sweep").Input(input).Part1(Day1Part1).Part2(Day1Part2)
 }
 
 func Day1Part1(input []int) int {

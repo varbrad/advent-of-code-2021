@@ -8,7 +8,7 @@ import (
 
 func main() {
 	input := utils.ReadInputToList("day10/input")
-	utils.Day(10).Input(input).Part1(Day10Part1).Part2(Day10Part2)
+	utils.Day(10, "Syntax Scoring").Input(input).Part1(Day10Part1).Part2(Day10Part2)
 }
 
 func Day10Part1(input []string) int {
