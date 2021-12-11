@@ -28,13 +28,16 @@ func main() {
 		return dayA < dayB
 	})
 
-	for _, day := range result {
+	for ix, day := range result {
 		cmd := exec.Command("go", "run", "./"+day)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		err := cmd.Run()
 		if err != nil {
 			fmt.Println("There was an error running day", day)
+		}
+		if ix != len(result)-1 {
+			fmt.Print("\n")
 		}
 	}
 }
