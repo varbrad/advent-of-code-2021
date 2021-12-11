@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -31,6 +32,9 @@ func main() {
 		cmd := exec.Command("go", "run", "./"+day)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
-		cmd.Run()
+		err := cmd.Run()
+		if err != nil {
+			fmt.Println("There was an error running day", day)
+		}
 	}
 }
