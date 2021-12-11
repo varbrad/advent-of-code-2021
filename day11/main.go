@@ -20,23 +20,13 @@ func Day11Part1(input [][]int) int {
 
 func Day11Part2(input [][]int) int {
 	og := makeOctoGrid(input)
-	n := 0
-	for {
-		n++
+	for n := 0; n < 10_000; n++ {
 		og.step()
-		ok := true
-		for _, row := range og.grid {
-			for _, v := range row {
-				if v != 0 {
-					ok = false
-					break
-				}
-			}
-		}
-		if ok {
-			return n
+		if og.allZeroes() {
+			return n + 1
 		}
 	}
+	return -1
 }
 
 type octoGrid struct {
@@ -58,56 +48,67 @@ func makeOctoGrid(grid [][]int) octoGrid {
 }
 
 func (og *octoGrid) step() int {
-	flashing := []point{}
-
-	for y := 0; y < len(og.grid); y++ {
-		for x := 0; x < len(og.grid[y]); x++ {
-			og.grid[y][x] += 1
-			if og.grid[y][x] == 10 {
-				flashing = append(flashing, point{x, y})
-			}
-		}
-	}
-
-	totalFlashed := og.handleFlashing(flashing)
-
-	for y := 0; y < len(og.grid); y++ {
-		for x := 0; x < len(og.grid[y]); x++ {
-			if og.grid[y][x] > 9 {
-				og.grid[y][x] = 0
-			}
-		}
-	}
-
+	initalFlashed := og.initialFlashed()
+	totalFlashed := og.calculateFlashed(initalFlashed)
+	og.resetFlashed()
 	return totalFlashed
 }
 
-func (og *octoGrid) handleFlashing(flashing []point) int {
-	totalFlashing := len(flashing)
-	for {
-		if len(flashing) == 0 {
-			return totalFlashing
+func (og *octoGrid) initialFlashed() []point {
+	flashing := []point{}
+	for a := 0; a < len(og.grid)*len(og.grid[0]); a++ {
+		x, y := a%len(og.grid), a/len(og.grid)
+		og.grid[y][x]++
+		if og.grid[y][x] == 10 {
+			flashing = append(flashing, point{x, y})
 		}
-		p := flashing[0]
-		flashing = flashing[1:]
+	}
+	return flashing
+}
+
+func (og *octoGrid) calculateFlashed(flashing []point) int {
+	for ix := 0; ix < len(flashing); ix++ {
+		p := flashing[ix]
 		for y := -1; y <= 1; y++ {
 			for x := -1; x <= 1; x++ {
 				if x == 0 && y == 0 {
 					continue
 				}
-				gy := p.y + y
-				gx := p.x + x
-				if gx < 0 || gy < 0 || gy > len(og.grid)-1 || gx > len(og.grid[gy])-1 {
-					continue
-				}
-				og.grid[p.y+y][p.x+x]++
-				if og.grid[p.y+y][p.x+x] == 10 {
+				if og.incrementCell(p.x+x, p.y+y) == 10 {
 					flashing = append(flashing, point{p.x + x, p.y + y})
-					totalFlashing++
 				}
 			}
 		}
 	}
+	return len(flashing)
+}
+
+func (og *octoGrid) resetFlashed() {
+	for a := 0; a < len(og.grid)*len(og.grid[0]); a++ {
+		x, y := a%len(og.grid), a/len(og.grid)
+		if og.grid[y][x] > 9 {
+			og.grid[y][x] = 0
+		}
+	}
+}
+
+func (og *octoGrid) incrementCell(x, y int) int {
+	if x < 0 || y < 0 || y > len(og.grid)-1 || x > len(og.grid[y])-1 {
+		return -1
+	}
+	og.grid[y][x]++
+	return og.grid[y][x]
+}
+
+func (og *octoGrid) allZeroes() bool {
+	for _, row := range og.grid {
+		for _, v := range row {
+			if v != 0 {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 func (og octoGrid) String() string {
