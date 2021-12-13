@@ -115,7 +115,7 @@ func canVisit(path []*cave, next *cave, maxVisits int) bool {
 		}
 		instances[c.name]++
 	}
-	if alreadyHere == false {
+	if !alreadyHere {
 		return true
 	}
 	for _, v := range instances {
