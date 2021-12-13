@@ -51,9 +51,13 @@ func toPaper(input []string) paper {
 
 	for _, line := range input {
 		if pointMatches := pointR.FindStringSubmatch(line); pointMatches != nil {
-			points[point{x: utils.ToInteger(pointMatches[1]), y: utils.ToInteger(pointMatches[2])}] = 1
+			x, y := utils.ToInteger(pointMatches[1]), utils.ToInteger(pointMatches[2])
+			points[point{x, y}]++
 		} else if foldMatches := foldR.FindStringSubmatch(line); foldMatches != nil {
-			folds = append(folds, fold{dir: foldMatches[1], value: utils.ToInteger(foldMatches[2])})
+			folds = append(
+				folds,
+				fold{dir: foldMatches[1], value: utils.ToInteger(foldMatches[2])},
+			)
 		}
 	}
 
@@ -62,45 +66,32 @@ func toPaper(input []string) paper {
 
 func (p *paper) fold(index int) {
 	fold := p.folds[index]
-	toDelete := []point{}
-	toAdd := []point{}
 	for cp := range p.points {
-		if fold.dir == "x" && cp.x > fold.value {
-			diff := cp.x - fold.value
-			newPoint := point{cp.x - (diff * 2), cp.y}
-			toAdd = append(toAdd, newPoint)
-			toDelete = append(toDelete, cp)
-		} else if fold.dir == "y" && cp.y > fold.value {
-			diff := cp.y - fold.value
-			newPoint := point{cp.x, cp.y - (diff * 2)}
-			toAdd = append(toAdd, newPoint)
-			toDelete = append(toDelete, cp)
+		if (fold.dir == "x" && cp.x <= fold.value) || (fold.dir == "y" && cp.y <= fold.value) {
+			continue
 		}
-	}
-	for _, cp := range toDelete {
+		newPoint := point{cp.x, cp.y}
+		if fold.dir == "x" {
+			newPoint.x -= (cp.x - fold.value) * 2
+		} else {
+			newPoint.y -= (cp.y - fold.value) * 2
+		}
 		delete(p.points, cp)
-	}
-	for _, cp := range toAdd {
-		p.points[cp] += 1
+		p.points[newPoint]++
 	}
 }
 
 func (p *paper) Print() string {
-	minX := 0
-	maxX := 0
-	minY := 0
-	maxY := 0
+	minX, maxX, minY, maxY := 0, 0, 0, 0
 	for cp := range p.points {
 		if cp.x < minX {
 			minX = cp.x
-		}
-		if cp.x > maxX {
+		} else if cp.x > maxX {
 			maxX = cp.x
 		}
 		if cp.y < minY {
 			minY = cp.y
-		}
-		if cp.y > maxY {
+		} else if cp.y > maxY {
 			maxY = cp.y
 		}
 	}
@@ -110,7 +101,7 @@ func (p *paper) Print() string {
 			if p.points[point{x, y}] == 0 {
 				out += "  "
 			} else {
-				out += "▓▓"
+				out += "██"
 			}
 		}
 		if y < maxY {
