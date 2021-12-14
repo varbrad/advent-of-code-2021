@@ -44,11 +44,10 @@ func (p *polymer) step() {
 }
 
 func (p *polymer) diff() int {
-	sums := map[byte]int{}
+	sums := map[byte]int{p.last: 1}
 	for k, v := range p.pairs {
 		sums[k[0]] += v
 	}
-	sums[p.last] += 1
 	min, max := math.MaxInt, math.MinInt
 	for _, v := range sums {
 		if v < min {
