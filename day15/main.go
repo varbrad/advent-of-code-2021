@@ -1,6 +1,8 @@
 package main
 
 import (
+	"container/heap"
+
 	"github.com/varbrad/advent-of-code-2021/utils"
 )
 
@@ -43,16 +45,15 @@ func solve(input [][]int) int {
 	end := point{len(grid.grid[0]) - 1, len(grid.grid) - 1}
 
 	open := openList{}
+	heap.Init(&open)
 	closed := make(map[point]*node)
 
-	open.addNode(&node{id: start, value: grid.get(start), cost: 0})
+	heap.Push(&open, &node{id: start, value: grid.get(start), cost: 0, index: 0})
 
 	var current *node
-	for open.len() > 0 {
-		current = open.next()
-
+	for open.Len() > 0 {
+		current = heap.Pop(&open).(*node)
 		closed[current.id] = current
-		open.remove(current)
 
 		if current.id == end {
 			break
@@ -64,7 +65,7 @@ func solve(input [][]int) int {
 			isOpen := open.isOpen(p)
 			_, isClosed := closed[p]
 			if !isOpen && !isClosed {
-				open.addNode(&node{id: p, value: grid.get(p), cost: cost, previous: current})
+				heap.Push(&open, &node{id: p, value: grid.get(p), cost: cost, previous: current})
 			} else if isOpen {
 				open.compare(p, cost, current)
 			}
@@ -87,23 +88,32 @@ type openList struct {
 	list []*node
 }
 
-func (ol *openList) addNode(n *node) {
-	l := len(ol.list)
-	for i := 0; i < l; i++ {
-		if ol.list[i].cost > n.cost {
-			ol.list = append(ol.list[:i], append([]*node{n}, ol.list[i:]...)...)
-			return
-		}
-	}
-	ol.list = append(ol.list, n)
-}
-
-func (ol *openList) len() int {
+// heap functions
+func (ol *openList) Len() int {
 	return len(ol.list)
 }
 
-func (ol *openList) next() *node {
-	return ol.list[0]
+func (ol *openList) Less(i, j int) bool {
+	return ol.list[i].cost < ol.list[j].cost
+}
+
+func (ol *openList) Swap(i, j int) {
+	ol.list[i], ol.list[j] = ol.list[j], ol.list[i]
+	ol.list[i].index = i
+	ol.list[j].index = j
+}
+
+func (ol *openList) Push(x interface{}) {
+	item := x.(*node)
+	item.index = ol.Len()
+	ol.list = append(ol.list, x.(*node))
+}
+
+func (ol *openList) Pop() interface{} {
+	item := ol.list[len(ol.list)-1]
+	item.index = -1
+	ol.list = ol.list[:len(ol.list)-1]
+	return item
 }
 
 func (ol *openList) compare(p point, cost int, current *node) {
@@ -114,17 +124,7 @@ func (ol *openList) compare(p point, cost int, current *node) {
 		if n.cost > cost {
 			n.cost = cost
 			n.previous = current
-			ol.remove(n)
-			ol.addNode(n)
-		}
-	}
-}
-
-func (ol *openList) remove(node *node) {
-	for i, n := range ol.list {
-		if n == node {
-			ol.list = append(ol.list[:i], ol.list[i+1:]...)
-			return
+			heap.Fix(ol, n.index)
 		}
 	}
 }
@@ -177,4 +177,5 @@ type node struct {
 	value    int
 	cost     int
 	previous *node
+	index    int
 }
