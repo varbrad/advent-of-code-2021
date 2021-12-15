@@ -49,7 +49,7 @@ func solve(input [][]int) int {
 	end := point{len(grid.grid[0]) - 1, len(grid.grid) - 1}
 	open[start] = &node{id: start, value: grid.get(start), f: grid.heuristic(start), g: grid.heuristic(start)}
 
-	current := lowestFScore(open)
+	var current *node
 	for len(open) > 0 {
 		current = lowestFScore(open)
 
