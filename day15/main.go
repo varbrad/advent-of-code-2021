@@ -47,7 +47,7 @@ func solve(input [][]int) int {
 	open := openList{}
 	closed := make(map[point]*node)
 
-	open.addNode(&node{id: start, value: grid.get(start), g: 0, h: grid.heuristic(start)})
+	open.addNode(&node{id: start, value: grid.get(start), cost: 0})
 
 	var current *node
 	for open.len() > 0 {
@@ -62,13 +62,13 @@ func solve(input [][]int) int {
 
 		neighbours := grid.neighbours(current.id)
 		for _, p := range neighbours {
-			g := current.g + grid.get(p)
+			cost := current.cost + grid.get(p)
 			isOpen := open.isOpen(p)
 			_, isClosed := closed[p]
 			if !isOpen && !isClosed {
-				open.addNode(&node{id: p, value: grid.get(p), g: g, h: grid.heuristic(p), previous: current})
+				open.addNode(&node{id: p, value: grid.get(p), cost: cost, previous: current})
 			} else if isOpen {
-				open.compare(p, g, current)
+				open.compare(p, cost, current)
 			}
 		}
 	}
@@ -89,9 +89,8 @@ func lowestFScore(open map[point]*node) *node {
 	lowest := math.MaxInt64
 	var lowestNode *node
 	for _, n := range open {
-		f := n.f()
-		if f < lowest {
-			lowest = f
+		if n.cost < lowest {
+			lowest = n.cost
 			lowestNode = n
 		}
 	}
@@ -104,9 +103,8 @@ type openList struct {
 
 func (ol *openList) addNode(n *node) {
 	l := len(ol.list)
-	f := n.f()
 	for i := 0; i < l; i++ {
-		if ol.list[i].f() > f {
+		if ol.list[i].cost > n.cost {
 			ol.list = append(ol.list[:i], append([]*node{n}, ol.list[i:]...)...)
 			return
 		}
@@ -122,13 +120,13 @@ func (ol *openList) next() *node {
 	return ol.list[0]
 }
 
-func (ol *openList) compare(p point, g int, current *node) {
+func (ol *openList) compare(p point, cost int, current *node) {
 	for _, n := range ol.list {
 		if n.id != p {
 			continue
 		}
-		if n.g > g {
-			n.g = g
+		if n.cost > cost {
+			n.cost = cost
 			n.previous = current
 			ol.remove(n)
 			ol.addNode(n)
@@ -166,11 +164,6 @@ func (g *grid) get(p point) int {
 	return g.grid[p.y][p.x]
 }
 
-func (g *grid) heuristic(p point) int {
-	maxX, maxY := len(g.grid[0]), len(g.grid)
-	return int(math.Abs(float64(p.x-maxX))) + int(math.Abs(float64(p.y-maxY)))
-}
-
 func (g *grid) neighbours(p point) []point {
 	neighbours := []point{}
 	if p.x > 0 {
@@ -193,14 +186,9 @@ type point struct {
 	y int
 }
 
-func (n *node) f() int {
-	return n.g + n.h
-}
-
 type node struct {
 	id       point
 	value    int
-	g        int
-	h        int
+	cost     int
 	previous *node
 }
