@@ -1,8 +1,6 @@
 package main
 
 import (
-	"math"
-
 	"github.com/varbrad/advent-of-code-2021/utils"
 )
 
@@ -83,18 +81,6 @@ func solve(input [][]int) int {
 	}
 
 	return sum
-}
-
-func lowestFScore(open map[point]*node) *node {
-	lowest := math.MaxInt64
-	var lowestNode *node
-	for _, n := range open {
-		if n.cost < lowest {
-			lowest = n.cost
-			lowestNode = n
-		}
-	}
-	return lowestNode
 }
 
 type openList struct {
