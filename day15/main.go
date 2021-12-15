@@ -41,20 +41,20 @@ func Day15Part2(input [][]int) int {
 
 func solve(input [][]int) int {
 	grid := makeGrid(input)
-
-	open := make(map[point]*node)
-	closed := make(map[point]*node)
-
 	start := point{0, 0}
 	end := point{len(grid.grid[0]) - 1, len(grid.grid) - 1}
-	open[start] = &node{id: start, value: grid.get(start), f: grid.heuristic(start), g: grid.heuristic(start)}
+
+	open := openList{}
+	closed := make(map[point]*node)
+
+	open.addNode(&node{id: start, value: grid.get(start), g: 0, h: grid.heuristic(start)})
 
 	var current *node
-	for len(open) > 0 {
-		current = lowestFScore(open)
+	for open.len() > 0 {
+		current = open.next()
 
 		closed[current.id] = current
-		delete(open, current.id)
+		open.remove(current)
 
 		if current.id == end {
 			break
@@ -63,16 +63,12 @@ func solve(input [][]int) int {
 		neighbours := grid.neighbours(current.id)
 		for _, p := range neighbours {
 			g := current.g + grid.get(p)
-			_, isOpen := open[p]
+			isOpen := open.isOpen(p)
 			_, isClosed := closed[p]
 			if !isOpen && !isClosed {
-				open[p] = &node{id: p, value: grid.get(p), f: g + grid.heuristic(p), g: g, previous: current}
+				open.addNode(&node{id: p, value: grid.get(p), g: g, h: grid.heuristic(p), previous: current})
 			} else if isOpen {
-				if open[p].g > g {
-					open[p].g = g
-					open[p].f = g + grid.heuristic(p)
-					open[p].previous = current
-				}
+				open.compare(p, g, current)
 			}
 		}
 	}
@@ -93,12 +89,69 @@ func lowestFScore(open map[point]*node) *node {
 	lowest := math.MaxInt64
 	var lowestNode *node
 	for _, n := range open {
-		if n.f < lowest {
-			lowest = n.f
+		f := n.f()
+		if f < lowest {
+			lowest = f
 			lowestNode = n
 		}
 	}
 	return lowestNode
+}
+
+type openList struct {
+	list []*node
+}
+
+func (ol *openList) addNode(n *node) {
+	l := len(ol.list)
+	f := n.f()
+	for i := 0; i < l; i++ {
+		if ol.list[i].f() > f {
+			ol.list = append(ol.list[:i], append([]*node{n}, ol.list[i:]...)...)
+			return
+		}
+	}
+	ol.list = append(ol.list, n)
+}
+
+func (ol *openList) len() int {
+	return len(ol.list)
+}
+
+func (ol *openList) next() *node {
+	return ol.list[0]
+}
+
+func (ol *openList) compare(p point, g int, current *node) {
+	for _, n := range ol.list {
+		if n.id != p {
+			continue
+		}
+		if n.g > g {
+			n.g = g
+			n.previous = current
+			ol.remove(n)
+			ol.addNode(n)
+		}
+	}
+}
+
+func (ol *openList) remove(node *node) {
+	for i, n := range ol.list {
+		if n == node {
+			ol.list = append(ol.list[:i], ol.list[i+1:]...)
+			return
+		}
+	}
+}
+
+func (ol *openList) isOpen(p point) bool {
+	for _, n2 := range ol.list {
+		if n2.id == p {
+			return true
+		}
+	}
+	return false
 }
 
 type grid struct {
@@ -140,10 +193,14 @@ type point struct {
 	y int
 }
 
+func (n *node) f() int {
+	return n.g + n.h
+}
+
 type node struct {
 	id       point
 	value    int
-	f        int
 	g        int
+	h        int
 	previous *node
 }
