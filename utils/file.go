@@ -18,6 +18,11 @@ func ReadInput(path string) []byte {
 	return bytes
 }
 
+func ReadInputToString(path string) string {
+	contents := ReadInput(path)
+	return strings.TrimSpace(string(contents))
+}
+
 func ReadInputToList(path string) []string {
 	contents := ReadInput(path)
 	return strings.Split(strings.TrimSpace(string(contents)), "\n")
