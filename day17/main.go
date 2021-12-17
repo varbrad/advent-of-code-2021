@@ -10,8 +10,7 @@ func main() {
 }
 
 func Day17Part1(input []int) int {
-	_, maxY := calculateY(0, input[2]*-1-1, 0, input[2:4])
-	return maxY
+	return calculateY(input[2]*-1 - 1)
 }
 
 func Day17Part2(input []int) int {
@@ -28,16 +27,11 @@ func Day17Part2(input []int) int {
 	return sum
 }
 
-func calculateY(y, dy, maxY int, input []int) (bool, int) {
-	switch {
-	case y < input[0]:
-		return false, 0
-	case y <= input[1]:
-		return true, maxY
-	case y+dy > maxY:
-		maxY = y + dy
+func calculateY(y int) int {
+	if y == 0 {
+		return 0
 	}
-	return calculateY(y+dy, dy-1, maxY, input)
+	return y + calculateY(y-1)
 }
 
 func calculate2d(x, y, dx, dy int, input []int) bool {
