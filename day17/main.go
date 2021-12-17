@@ -10,7 +10,8 @@ func main() {
 }
 
 func Day17Part1(input []int) int {
-	return calculateY(input[2]*-1 - 1)
+	dy := input[2]*-1 - 1
+	return dy * (dy + 1) / 2
 }
 
 func Day17Part2(input []int) int {
@@ -25,13 +26,6 @@ func Day17Part2(input []int) int {
 		}
 	}
 	return sum
-}
-
-func calculateY(y int) int {
-	if y == 0 {
-		return 0
-	}
-	return y + calculateY(y-1)
 }
 
 func calculate2d(x, y, dx, dy int, input []int) bool {
