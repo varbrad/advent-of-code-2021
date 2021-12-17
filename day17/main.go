@@ -1,8 +1,6 @@
 package main
 
 import (
-	"math"
-
 	"github.com/varbrad/advent-of-code-2021/utils"
 )
 
@@ -12,113 +10,49 @@ func main() {
 }
 
 func Day17Part1(input []int) int {
-	return findBestTrickShot(input)
+	_, maxY := calculateY(0, input[2]*-1-1, 0, input[2:4])
+	return maxY
 }
 
 func Day17Part2(input []int) int {
-	xs := getValidXHits(input)
-	ys := getValidYHits(input)
-	total := 0
-	for _, y := range ys {
-		for _, x := range xs {
-			ok := fullTrickShot(x, y, input)
-			if ok {
-				total++
+	sum := 0
+	maxX := input[1] + 1
+	maxY := input[2] * -1
+	for dy := -maxY; dy < maxY; dy++ {
+		for dx := 0; dx < maxX; dx++ {
+			if calculate2d(0, 0, dx, dy, input) {
+				sum++
 			}
 		}
 	}
-	return total
+	return sum
 }
 
-func getValidXHits(input []int) []int {
-	validX := []int{}
-	s := input[0:2]
-	for i := -250; i < 250; i++ {
-		t := xShot(i, s)
-		if t == "hit" {
-			validX = append(validX, i)
-		}
+func calculateY(y, dy, maxY int, input []int) (bool, int) {
+	switch {
+	case y < input[0]:
+		return false, 0
+	case y <= input[1]:
+		return true, maxY
+	case y+dy > maxY:
+		maxY = y + dy
 	}
-	return validX
+	return calculateY(y+dy, dy-1, maxY, input)
 }
 
-func getValidYHits(input []int) []int {
-	validY := []int{}
-	s := input[2:4]
-	for i := -250; i < 250; i++ {
-		t, _ := trickShot(i, s)
-		if t == "hit" {
-			validY = append(validY, i)
-		}
+func calculate2d(x, y, dx, dy int, input []int) bool {
+	switch {
+	case x > input[1] || y < input[2]:
+		return false
+	case x >= input[0] && y <= input[3]:
+		return true
 	}
-	return validY
+	return calculate2d(x+dx, y+dy, newDx(dx), dy-1, input)
 }
 
-func findBestTrickShot(input []int) int {
-	bestHit := -1
-	for i := 0; i < 250; i++ {
-		t, r := trickShot(i, input[2:4])
-		if t == "hit" {
-			if r > bestHit {
-				bestHit = r
-			}
-		}
+func newDx(dx int) int {
+	if dx == 0 {
+		return 0
 	}
-	return bestHit
-}
-
-func trickShot(dy int, target []int) (string, int) {
-	y := 0
-	maxY := math.MinInt
-	for {
-		y += dy
-		if y > maxY {
-			maxY = y
-		}
-		dy -= 1
-		if y <= target[1] && y >= target[0] {
-			return "hit", maxY
-		} else if y < target[0] {
-			return "miss", maxY
-		}
-	}
-}
-
-func xShot(dx int, target []int) string {
-	x := 0
-	for {
-		x += dx
-		if dx > 0 {
-			dx--
-		} else if dx < 0 {
-			dx++
-		}
-		if x <= target[1] && x >= target[0] {
-			return "hit"
-		}
-		if dx == 0 {
-			return "miss"
-		}
-	}
-}
-
-func fullTrickShot(dx int, dy int, input []int) bool {
-	x := 0
-	y := 0
-	for {
-		x += dx
-		y += dy
-		if dx > 0 {
-			dx--
-		} else if dx < 0 {
-			dx++
-		}
-		dy -= 1
-		if x <= input[1] && x >= input[0] && y <= input[3] && y >= input[2] {
-			return true
-		}
-		if y < input[2] || (x > input[1] && x < input[0] && dx == 0) {
-			return false
-		}
-	}
+	return dx - 1
 }
