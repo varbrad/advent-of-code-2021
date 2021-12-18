@@ -8,21 +8,20 @@ import (
 )
 
 type snailfishNumber struct {
-	value  int
-	parent *snailfishNumber
-	left   *snailfishNumber
-	right  *snailfishNumber
+	value int
+	left  *snailfishNumber
+	right *snailfishNumber
 }
 
 var numberRegex = regexp.MustCompile(`^\d+$`)
 
 func parseSnailfishNumber(input string) *snailfishNumber {
-	return getNextSnailfish(input, nil)
+	return getNextSnailfish(input)
 }
 
-func getNextSnailfish(input string, parent *snailfishNumber) *snailfishNumber {
+func getNextSnailfish(input string) *snailfishNumber {
 	if numberRegex.MatchString(input) {
-		return &snailfishNumber{value: utils.ToInteger(input), parent: parent}
+		return &snailfishNumber{value: utils.ToInteger(input)}
 	}
 
 	stack := 0
@@ -43,9 +42,9 @@ func getNextSnailfish(input string, parent *snailfishNumber) *snailfishNumber {
 		panic("Unable to parse input")
 	}
 
-	newSfn := &snailfishNumber{parent: parent}
-	newSfn.left = getNextSnailfish(input[1:midPoint], newSfn)
-	newSfn.right = getNextSnailfish(input[midPoint+1:len(input)-1], newSfn)
+	newSfn := &snailfishNumber{}
+	newSfn.left = getNextSnailfish(input[1:midPoint])
+	newSfn.right = getNextSnailfish(input[midPoint+1 : len(input)-1])
 	return newSfn
 }
 
@@ -150,8 +149,8 @@ func (sfn *snailfishNumber) split(splitNode *snailfishNumber) {
 	right := (splitNode.value + 1) / 2
 
 	splitNode.value = 0
-	splitNode.left = &snailfishNumber{value: left, parent: splitNode}
-	splitNode.right = &snailfishNumber{value: right, parent: splitNode}
+	splitNode.left = &snailfishNumber{value: left}
+	splitNode.right = &snailfishNumber{value: right}
 }
 
 func (sfn *snailfishNumber) list() []*snailfishNumber {
