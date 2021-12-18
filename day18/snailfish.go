@@ -122,9 +122,8 @@ func (sfn *snailfishNumber) findSplitNode() *snailfishNumber {
 	if sfn.left == nil && sfn.right == nil {
 		if sfn.value > 9 {
 			return sfn
-		} else {
-			return nil
 		}
+		return nil
 	}
 
 	if sfn.left != nil {

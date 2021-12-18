@@ -21,7 +21,7 @@ func calculateIncreases(numbers []int, gap int) int {
 	inc := 0
 	for i := 0; i < len(numbers)-gap; i++ {
 		if numbers[i] < numbers[i+gap] {
-			inc += 1
+			inc++
 		}
 	}
 	return inc

@@ -20,7 +20,7 @@ func Day8Part1(input []string) int {
 		for _, digit := range display.digits {
 			switch len(digit) {
 			case 2, 3, 4, 7:
-				sum += 1
+				sum++
 			}
 		}
 	}

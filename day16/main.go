@@ -47,12 +47,12 @@ type transmission struct {
 func (t *transmission) makePacket(index int) (*packet, int) {
 	p := &packet{}
 	p.version = bitSliceToInt(&t.bits, index, 3)
-	p.typeId = bitSliceToInt(&t.bits, index+3, 3)
+	p.typeID = bitSliceToInt(&t.bits, index+3, 3)
 
 	parsedBits := 6
 
 	// literal
-	if p.typeId == 4 {
+	if p.typeID == 4 {
 		literal := []int{}
 		for {
 			ni := index + parsedBits
@@ -65,11 +65,11 @@ func (t *transmission) makePacket(index int) (*packet, int) {
 		}
 		p.literal = bitSliceToInt(&literal, 0, len(literal))
 	} else {
-		p.lengthTypeId = bitSliceToInt(&t.bits, index+parsedBits, 1)
+		p.lengthTypeID = bitSliceToInt(&t.bits, index+parsedBits, 1)
 		parsedBits++
 
 		subPackets := []*packet{}
-		if p.lengthTypeId == 0 {
+		if p.lengthTypeID == 0 {
 			len := bitSliceToInt(&t.bits, index+parsedBits, 15)
 			parsedBits += 15
 			a := 0
@@ -79,7 +79,7 @@ func (t *transmission) makePacket(index int) (*packet, int) {
 				a += tb
 				subPackets = append(subPackets, sp)
 			}
-		} else if p.lengthTypeId == 1 {
+		} else if p.lengthTypeID == 1 {
 			pkts := bitSliceToInt(&t.bits, index+parsedBits, 11)
 			parsedBits += 11
 			for i := 0; i < pkts; i++ {

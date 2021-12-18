@@ -42,9 +42,9 @@ func getCommons(input []string) []Sums {
 		for ix, rune := range s {
 			char := string(rune)
 			if char == "0" {
-				commons[ix].zero += 1
+				commons[ix].zero++
 			} else {
-				commons[ix].one += 1
+				commons[ix].one++
 			}
 		}
 	}

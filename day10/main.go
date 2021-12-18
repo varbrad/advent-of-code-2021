@@ -56,9 +56,8 @@ func parseLine(runes []rune, stack []rune) parsedLine {
 		lastStack := stack[len(stack)-1]
 		if doRunesClose(lastStack, current) {
 			return parseLine(runes[1:], stack[:len(stack)-1])
-		} else {
-			return parsedLine{"corrupted", stack, current}
 		}
+		return parsedLine{"corrupted", stack, current}
 	}
 	panic("unknown character encountered")
 }

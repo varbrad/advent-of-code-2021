@@ -4,9 +4,9 @@ import "math"
 
 type packet struct {
 	version      int
-	typeId       int
+	typeID       int
 	literal      int
-	lengthTypeId int
+	lengthTypeID int
 	subPackets   []*packet
 }
 
@@ -22,7 +22,7 @@ func (p *packet) versionSum() int {
 }
 
 func (p *packet) value() int {
-	switch p.typeId {
+	switch p.typeID {
 	case 0:
 		return p.sum()
 	case 1:
