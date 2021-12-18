@@ -5,6 +5,7 @@ import (
 	"math"
 )
 
+// AverageInts Returns the average of the provided integers, rounded to the nearest integer
 func AverageInts(values []int) int {
 	if len(values) == 0 {
 		panic(errors.New("cannot average empty array"))
@@ -13,10 +14,12 @@ func AverageInts(values []int) int {
 	return RoundToInt(float64(sum) / float64(len(values)))
 }
 
+// RoundToInt Rounds the provided float64 to the nearest integer
 func RoundToInt(value float64) int {
 	return int(math.Round(value))
 }
 
+// MaxInteger Returns the larger of the two integers provided
 func MaxInteger(a, b int) int {
 	if a > b {
 		return a
