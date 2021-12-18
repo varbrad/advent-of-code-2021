@@ -21,15 +21,19 @@ func Day18Part1(input []string) int {
 }
 
 func Day18Part2(input []string) int {
-	maximumSum := -1
+	max := -1
 	for i := 0; i < len(input)-1; i++ {
 		for j := i + 1; j < len(input); j++ {
-			a := parseSnailfishNumber(input[i]).Add(parseSnailfishNumber(input[j])).Reduce().Magnitude()
-			b := parseSnailfishNumber(input[j]).Add(parseSnailfishNumber(input[i])).Reduce().Magnitude()
-
-			maximumSum = utils.MaxInteger(utils.MaxInteger(a, b), maximumSum)
+			max = utils.MaxInteger(max, maximumMagnitude(input[i], input[j]))
 		}
 	}
 
-	return maximumSum
+	return max
+}
+
+func maximumMagnitude(a string, b string) int {
+	return utils.MaxInteger(
+		parseSnailfishNumber(a).Add(parseSnailfishNumber(b)).Reduce().Magnitude(),
+		parseSnailfishNumber(b).Add(parseSnailfishNumber(a)).Reduce().Magnitude(),
+	)
 }
