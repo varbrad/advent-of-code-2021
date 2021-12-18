@@ -16,3 +16,10 @@ func AverageInts(values []int) int {
 func RoundToInt(value float64) int {
 	return int(math.Round(value))
 }
+
+func MaxInteger(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
