@@ -9,6 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: docker://morphy/revive-action:v2
+        with:
+          config: revive.toml
   test:
     name: Test
     runs-on: ubuntu-latest
