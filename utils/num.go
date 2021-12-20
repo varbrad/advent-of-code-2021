@@ -26,3 +26,11 @@ func MaxInteger(a, b int) int {
 	}
 	return b
 }
+
+// MinInteger Returns the smaller of the two integers provided
+func MinInteger(a, b int) int {
+	if a > b {
+		return b
+	}
+	return a
+}
