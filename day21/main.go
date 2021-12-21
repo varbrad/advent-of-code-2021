@@ -36,11 +36,11 @@ func Day21Part2(input []int) int {
 
 type diceGame struct {
 	cache     *map[[4]int][2]int
-	diceRolls *[]int
+	diceRolls *[27]int
 }
 
 func makeDiceGame() *diceGame {
-	rolls := make([]int, 27) // 3^3
+	rolls := [27]int{}
 	for i := 0; i < 27; i++ {
 		rolls[i] = i/9 + (i/3)%3 + i%3 + 3
 	}
