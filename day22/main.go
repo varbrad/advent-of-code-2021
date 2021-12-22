@@ -30,9 +30,9 @@ func solve(input []string, boundCheck bool) int {
 		}
 		newCuboids := map[cuboid]int{}
 		for key, value := range cuboids {
-			ok, subCuboid := makeSubCuboid(key, ins.cuboid)
-			if ok {
-				newCuboids[subCuboid] -= value
+			intersects, intersection := getIntersectionCuboid(key, ins.cuboid)
+			if intersects {
+				newCuboids[intersection] -= value
 			}
 		}
 		if ins.mode == "on" {
@@ -69,7 +69,7 @@ func makeCuboid(x0, x1, y0, y1, z0, z1 int) cuboid {
 	}
 }
 
-func makeSubCuboid(key cuboid, new cuboid) (ok bool, c cuboid) {
+func getIntersectionCuboid(key cuboid, new cuboid) (intersects bool, intersection cuboid) {
 	ix0 := utils.MaxInteger(new.start.x, key.start.x)
 	ix1 := utils.MinInteger(new.end.x, key.end.x)
 	iy0 := utils.MaxInteger(new.start.y, key.start.y)
@@ -81,7 +81,7 @@ func makeSubCuboid(key cuboid, new cuboid) (ok bool, c cuboid) {
 		return true, makeCuboid(ix0, ix1, iy0, iy1, iz0, iz1)
 	}
 
-	return false, c
+	return false, intersection
 }
 
 func (c cuboid) volume() int {
