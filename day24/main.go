@@ -4,7 +4,45 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/varbrad/advent-of-code-2021/utils"
 )
+
+func main() {
+	input := utils.ReadInputToList("day24/input")
+	utils.Day(24, "ALU").Input(input).Part1(Day24Part1).Part2(Day24Part2)
+}
+
+func Day24Part1(input []string) int {
+	p := parseProgram(input)
+	digits := []int{9, 6, 2, 9, 9, 8, 9, 6, 4, 4, 9, 9, 9, 7}
+	p.setInput(digits)
+	p.run()
+	if p.mem['z'] != 0 {
+		panic("Something has gone wrong!")
+	}
+	return longInt(digits)
+}
+
+func Day24Part2(input []string) int {
+	p := parseProgram(input)
+	digits := []int{3, 1, 1, 6, 2, 1, 4, 1, 1, 1, 6, 8, 4, 1}
+	p.setInput(digits)
+	p.run()
+	if p.mem['z'] != 0 {
+		panic("Something has gone wrong!")
+	}
+	return longInt(digits)
+}
+
+func longInt(ints []int) int {
+	s := 0
+	for _, v := range ints {
+		s *= 10
+		s += v
+	}
+	return s
+}
 
 type op struct {
 	cmd  string
