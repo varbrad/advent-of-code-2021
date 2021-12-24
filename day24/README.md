@@ -43,7 +43,7 @@ In order to solve part 1, we want to maximize every digit, while obeying our con
 
 Above, the constrained cells are listed on the right-hand side (`w14`, `w9`, `w6`, etc.), so we can fill in the _unconstrained_ cells right away (`w1`, `w4`, `w5`, etc.) with the largest allowable digit, `9`.
 
-| 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  |
+| w1  | w2  | w3  | w4  | w5  | w6  | w7  | w8  | w9  | w10 | w11 | w12 | w13 | w14 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 9   |     |     | 9   | 9   |     | 9   |     |     |     | 9   | 9   | 9   |     |
 
@@ -54,7 +54,7 @@ We now simply have to fill in the remaining following the constraints.
 - `w6` must be `8` (1 less than `w5`)
 - etc.
 
-| 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  |
+| w1  | w2  | w3  | w4  | w5  | w6  | w7  | w8  | w9  | w10 | w11 | w12 | w13 | w14 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 9   | 6   | 2   | 9   | 9   | 8   | 9   | 6   | 4   | 4   | 9   | 9   | 9   | 7   |
 
@@ -64,7 +64,7 @@ In order to solve part 2, we want to minimize every digit, while obeying our con
 
 In this scenario, our constrained cells are actually on the left-hand side (`w1`, `w4`, `w5`, etc.), so we can fill in the _unconstrained_ cells right away (`w14`, `w9`, `w6`, etc.) with the smallest allowable digit, `1` (`0` is not allowed).
 
-| 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  |
+| w1  | w2  | w3  | w4  | w5  | w6  | w7  | w8  | w9  | w10 | w11 | w12 | w13 | w14 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |     | 1   | 1   |     |     | 1   |     | 1   | 1   | 1   |     |     |     | 1   |
 
@@ -75,6 +75,6 @@ We now simply have to fill in the remaining following the constraints.
 - `w5` must be `2` (1 more than `w6`)
 - etc.
 
-| 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  |
+| w1  | w2  | w3  | w4  | w5  | w6  | w7  | w8  | w9  | w10 | w11 | w12 | w13 | w14 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 3   | 1   | 1   | 6   | 2   | 1   | 4   | 1   | 1   | 1   | 6   | 8   | 4   | 1   |
