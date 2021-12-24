@@ -41,7 +41,7 @@ This leaves us with the following constraints (Where `w1` is the first digit in 
 
 In order to solve part 1, we want to maximize every digit, while obeying our constraints.
 
-Above, the constrained cells are listed on the right-hand side (`w14`, `w9`, `w6`, etc.), so we can fill in the _unconstrained_ cells right away (`w1`, `w4`, `w5`, etc.).
+Above, the constrained cells are listed on the right-hand side (`w14`, `w9`, `w6`, etc.), so we can fill in the _unconstrained_ cells right away (`w1`, `w4`, `w5`, etc.) with the largest allowable digit, `9`.
 
 | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -62,7 +62,7 @@ We now simply have to fill in the remaining following the constraints.
 
 In order to solve part 2, we want to minimize every digit, while obeying our constraints.
 
-In this scenario, our constrained cells are actually on the left-hand side (`w1`, `w4`, `w5`, etc.), so we can fill in the _unconstrained_ cells right away (`w14`, `w9`, `w6`, etc.).
+In this scenario, our constrained cells are actually on the left-hand side (`w1`, `w4`, `w5`, etc.), so we can fill in the _unconstrained_ cells right away (`w14`, `w9`, `w6`, etc.) with the smallest allowable digit, `1` (`0` is not allowed).
 
 | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
