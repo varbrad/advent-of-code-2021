@@ -7,8 +7,8 @@ import (
 	"github.com/varbrad/advent-of-code-2021/utils"
 )
 
-func TestDay22Part1(t *testing.T) {
-	t.Run("Should solve an example #1", func(t *testing.T) {
+func TestDay25Part1(t *testing.T) {
+	t.Run("Should solve the example", func(t *testing.T) {
 		input := []string{
 			"v...>>.vv>",
 			".vv>>.vv..",
